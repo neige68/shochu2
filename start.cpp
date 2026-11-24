@@ -42,6 +42,11 @@ DWORD Cycle(Cloudflare& cloudflare)
         BOOST_LOG_TRIVIAL(error) << x.what();
         return CONFIG_ERROR_INTERVAL;
     }
+    if (!config.mydns_enable() && !config.cf_enable()) {
+        BOOST_LOG_TRIVIAL(warning) << "Neither [MYDNS] nor [CLOUDFLARE] is enabled in shochu.ini "
+                                      "(set Enable=1; the old [POP3] format is not supported). See shochu.ini.sample.";
+        return CONFIG_ERROR_INTERVAL;
+    }
     // 片方が失敗してももう片方は実行する
     bool mydns_ok = true;
     bool cloudflare_ok = true;
