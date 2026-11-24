@@ -1,0 +1,10 @@
+# .gitignore
+build/
+log/
+# secrets: use shochu.ini.sample as a template
+shochu.ini
+.claude/settings.local.json
+.claude/todos/
+*~
+*.bak
+*.aps

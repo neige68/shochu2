@@ -1,0 +1,35 @@
+; shochu.ini.sample
+; Copy to shochu.ini (next to shochu.exe) and edit.
+; NOTE: shochu.ini holds secrets. Do NOT commit it.
+; NOTE: Comments must be on their own lines (no trailing comments).
+
+[SHOCHU]
+; Interval after a successful cycle [sec]
+NormalInterval=900
+; Interval after a failed cycle [sec]
+AbnormalInterval=60
+; HTTP timeout [sec]
+HttpTimeOut=10
+; 0=fatal 1=error 2=warning 3=info 4=debug 5=trace
+LogLevel=3
+; Relative path is based on the exe directory
+LogDir=log
+
+[MYDNS]
+Enable=1
+Url=https://ipv4.mydns.jp/login.html
+User0=mydnsXXXXXX
+Password0=XXXXXXXX
+;User1=mydnsYYYYYY
+;Password1=YYYYYYYY
+
+[CLOUDFLARE]
+Enable=0
+; API Token with Zone:DNS:Edit and Zone:Zone:Read permission
+ApiToken=XXXXXXXX
+; Returns "ip=a.b.c.d" line (IPv4 literal host, so the result is always IPv4)
+IpCheckUrl=https://1.1.1.1/cdn-cgi/trace
+; Re-verify the records every N cycles even if the IP did not change
+RecheckCycles=8
+Record0=www.example.com
+;Record1=home.example.net

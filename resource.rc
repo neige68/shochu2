@@ -1,0 +1,47 @@
+// <resource.rc>
+//
+// Project shochu
+// Copyright (C) 2025-2026 neige68
+//
+// Note: Resource Script (ASCII only)
+//
+
+#include <windows.h>
+#include "version.h"
+
+1 VERSIONINFO
+    FILEVERSION     VER_FILEVERSION
+    PRODUCTVERSION  VER_PRODUCTVERSION
+    FILEOS          VOS__WINDOWS32
+    FILETYPE        VFT_APP
+#ifdef NDEBUG
+    FILEFLAGSMASK   0
+    FILEFLAGS       0
+#else
+    FILEFLAGSMASK   VS_FF_DEBUG | VS_FF_SPECIALBUILD
+    FILEFLAGS       VS_FF_DEBUG
+#endif
+{
+    BLOCK "StringFileInfo"
+    {
+        BLOCK "040904B0" // English (US), Unicode
+        {
+            VALUE "FileDescription", VER_FILEDESCRIPTION
+            VALUE "FileVersion", VER_FILEVERSION_STR
+            VALUE "InternalName", "SHOCHU"
+            VALUE "LegalCopyright", VER_LEGALCOPYRIGHT
+            VALUE "OriginalFilename", "SHOCHU.EXE"
+            VALUE "ProductName", VER_PRODUCTNAME
+            VALUE "ProductVersion", VER_PRODUCTVERSION_STR
+#ifndef NDEBUG
+            VALUE "SpecialBuild", "Debug Version"
+#endif
+        }
+    }
+    BLOCK "VarFileInfo"
+    {
+        VALUE "Translation", 0x0409, 0x04B0
+    }
+}
+
+// end of <resource.rc>
