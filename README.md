@@ -30,12 +30,24 @@ Boost が C: 以外にある場合は環境変数 `CMAKE_PREFIX_PATH` で指定�
 
 ### 入手
 
-[Releases](https://github.com/neige68/shochu2/releases) から最新の `shochu2.7z` をダウンロードして展開します
-（`shochu.exe` と `shochu.ini.sample` が入っています。7-Zip などで展開してください）。
+[Releases](https://github.com/neige68/shochu2/releases/latest) ページから `shochu2.7z` をダウンロードし、
+7-Zip などで展開します（`shochu.exe` / `shochu.ini.sample` / `LICENSE` が入っています）。
+
+コマンドで取得する場合（どれか 1 つ）:
+
+```
+curl.exe -L -O https://github.com/neige68/shochu2/releases/latest/download/shochu2.7z
+```
+
+```
+powershell -Command "Invoke-WebRequest https://github.com/neige68/shochu2/releases/latest/download/shochu2.7z -OutFile shochu2.7z"
+```
 
 ```
 gh release download --repo neige68/shochu2 --pattern shochu2.7z
 ```
+
+`curl.exe` は Windows 10 以降に標準で入っています。展開は `7z x shochu2.7z`。
 
 ### 新規インストール
 
