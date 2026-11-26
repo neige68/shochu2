@@ -100,6 +100,9 @@ extern "C" {
 ////
    VOID ServiceStart(DWORD dwArgc, LPTSTR *lpszArgv);
    VOID ServiceStop();
+   // Called (from the service control handler thread) when the PC resumed from
+   // sleep/hibernate. Must return quickly.
+   VOID ServiceResume();
 //////////////////////////////////////////////////////////////////////////////
 
 

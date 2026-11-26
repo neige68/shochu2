@@ -28,7 +28,7 @@ PURPOSE:  Implements functions required by all Windows NT services
 
 FUNCTIONS:
   main(int argc, char **argv);
-  service_ctrl(DWORD dwCtrlCode);
+  service_ctrl(DWORD dwCtrlCode, DWORD dwEventType, LPVOID lpEventData, LPVOID lpContext);
   service_main(DWORD dwArgc, LPTSTR *lpszArgv);
   CmdInstallService();
   CmdRemoveService();
@@ -54,7 +54,7 @@ BOOL                    bDebug = FALSE;
 TCHAR                   szErr[256];
 
 // internal function prototypes
-VOID WINAPI service_ctrl(DWORD dwCtrlCode);
+DWORD WINAPI service_ctrl(DWORD dwCtrlCode, DWORD dwEventType, LPVOID lpEventData, LPVOID lpContext);
 VOID WINAPI service_main(DWORD dwArgc, LPTSTR *lpszArgv);
 VOID CmdInstallService();
 VOID CmdRemoveService();
@@ -153,7 +153,7 @@ void WINAPI service_main(DWORD dwArgc, LPTSTR *lpszArgv)
 
    // register our service control handler:
    //
-   sshStatusHandle = RegisterServiceCtrlHandler( TEXT(SZSERVICENAME), service_ctrl);
+   sshStatusHandle = RegisterServiceCtrlHandlerEx( TEXT(SZSERVICENAME), service_ctrl, nullptr);
 
    if (!sshStatusHandle)
       goto cleanup;
@@ -198,13 +198,15 @@ void WINAPI service_main(DWORD dwArgc, LPTSTR *lpszArgv)
 //
 //  PARAMETERS:
 //    dwCtrlCode - type of control requested
+//    dwEventType - event type (SERVICE_CONTROL_POWEREVENT: PBT_*)
+//    lpEventData, lpContext - unused
 //
 //  RETURN VALUE:
-//    none
+//    NO_ERROR, or ERROR_CALL_NOT_IMPLEMENTED for unsupported controls
 //
 //  COMMENTS:
 //
-VOID WINAPI service_ctrl(DWORD dwCtrlCode)
+DWORD WINAPI service_ctrl(DWORD dwCtrlCode, DWORD dwEventType, LPVOID /*lpEventData*/, LPVOID /*lpContext*/)
 {
    // Handle the requested control code.
    //
@@ -220,7 +222,15 @@ VOID WINAPI service_ctrl(DWORD dwCtrlCode)
    case SERVICE_CONTROL_STOP:
       ReportStatusToSCMgr(SERVICE_STOP_PENDING, NO_ERROR, 0);
       ServiceStop();
-      return;
+      return NO_ERROR;
+
+      // Resume from sleep/hibernate: the wait timer does not count the
+      // time spent asleep, so tell the service to run a cycle soon.
+      //
+   case SERVICE_CONTROL_POWEREVENT:
+      if (dwEventType == PBT_APMRESUMEAUTOMATIC || dwEventType == PBT_APMRESUMESUSPEND)
+         ServiceResume();
+      return NO_ERROR;
 
       // Update the service status.
       //
@@ -230,11 +240,12 @@ VOID WINAPI service_ctrl(DWORD dwCtrlCode)
       // invalid control code
       //
    default:
-      break;
+      return ERROR_CALL_NOT_IMPLEMENTED;
 
    }
 
    ReportStatusToSCMgr(ssStatus.dwCurrentState, NO_ERROR, 0);
+   return NO_ERROR;
 }
 
 
@@ -269,7 +280,7 @@ BOOL ReportStatusToSCMgr(DWORD dwCurrentState,
       if (dwCurrentState == SERVICE_START_PENDING)
          ssStatus.dwControlsAccepted = 0;
       else
-         ssStatus.dwControlsAccepted = SERVICE_ACCEPT_STOP;
+         ssStatus.dwControlsAccepted = SERVICE_ACCEPT_STOP | SERVICE_ACCEPT_POWEREVENT;
 
       ssStatus.dwCurrentState = dwCurrentState;
       ssStatus.dwWin32ExitCode = dwWin32ExitCode;
