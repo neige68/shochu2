@@ -99,5 +99,5 @@ shochu.exe -debug
 
 ## ライセンス
 
-Boost Software License 1.0（`LICENSE` を参照）。`service.cpp` / `service.h` は Microsoft の
+MIT License（`LICENSE` を参照）。`service.cpp` / `service.h` は Microsoft の
 Windows Classic Samples（MIT License）をもとにしています。
