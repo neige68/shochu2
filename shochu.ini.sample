@@ -29,7 +29,9 @@ Enable=0
 ApiToken=XXXXXXXX
 ; Returns "ip=a.b.c.d" line (IPv4 literal host, so the result is always IPv4)
 IpCheckUrl=https://1.1.1.1/cdn-cgi/trace
-; Re-verify the records every N cycles even if the IP did not change
-RecheckCycles=8
+; Re-verify the records every N cycles even if the IP did not change.
+; 1 = every cycle (default): records edited by hand are restored in the next cycle.
+; Larger values reduce API calls but delay the restoration by N cycles.
+RecheckCycles=1
 Record0=www.example.com
 ;Record1=home.example.net

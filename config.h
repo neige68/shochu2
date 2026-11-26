@@ -61,8 +61,8 @@ public:
     std::string cf_api_token() const { return get_string("CLOUDFLARE.ApiToken"); }
     std::string cf_ip_check_url() const
         { return get_string("CLOUDFLARE.IpCheckUrl", "https://1.1.1.1/cdn-cgi/trace"); }
-    /// IP が変わらなくても N 周期ごとにレコードを再確認する
-    int cf_recheck_cycles() const { return get_int("CLOUDFLARE.RecheckCycles", 8, 1); }
+    /// IP が変わらなくても N 周期ごとにレコードを再確認する(既定 1 = 毎周期。手作業での書き換えも次の周期で戻る)
+    int cf_recheck_cycles() const { return get_int("CLOUDFLARE.RecheckCycles", 1, 1); }
     /// Record0, Record1, ... (空なら終了, 抜け番は 9 まで許容)
     std::vector<std::string> cf_records() const;
 
