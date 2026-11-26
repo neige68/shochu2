@@ -28,7 +28,18 @@ Boost が C: 以外にある場合は環境変数 `CMAKE_PREFIX_PATH` で指定�
 
 ## インストール
 
-1. `shochu.exe` と、`shochu.ini.sample` を編集した `shochu.ini` を同じディレクトリに置きます。
+### 入手
+
+[Releases](https://github.com/neige68/shochu2/releases) から最新の `shochu2.7z` をダウンロードして展開します
+（`shochu.exe` と `shochu.ini.sample` が入っています。7-Zip などで展開してください）。
+
+```
+gh release download --repo neige68/shochu2 --pattern shochu2.7z
+```
+
+### 新規インストール
+
+1. `shochu.exe` を任意のディレクトリに置き、同じディレクトリで `shochu.ini.sample` を `shochu.ini` にコピーして編集します。
    **`shochu.ini` にはパスワードや API トークンが入るのでコミットしないでください**（`.gitignore` 済み）
 2. 管理者権限のコマンドプロンプトで
 
@@ -39,8 +50,23 @@ Boost が C: 以外にある場合は環境変数 `CMAKE_PREFIX_PATH` で指定�
 
    サービス名は `shochu`、スタートアップの種類は自動（`Tcpip` に依存）です。
 
-旧 `shochu` を使っていた場合は、先に旧 exe で `net stop shochu` と `shochu.exe /uninstall` を行ってから
-インストールしてください（サービス名が同じです）。
+### 旧 shochu（BCB5 版）からの置き換え
+
+サービス名が同じ `shochu` なので、アンインストール・再インストールは不要です。
+管理者権限のコマンドプロンプトで、サービスを止めて exe を入れ替え、再開します
+（旧 exe からの入れ替えで動作することを確認済み）。
+
+```
+net stop shochu
+copy /y shochu.exe <旧 shochu.exe のあるディレクトリ>\shochu.exe
+net start shochu
+```
+
+- 旧版の `shochu.ini`（`[POP3]` 形式）は**そのままでは使えません**。
+  `[MYDNS]` / `[CLOUDFLARE]` のどちらも有効でないと、警告をログに出して 1 分ごとに再試行するだけで、何も通知しません。
+  `shochu.ini.sample` を参考に `[MYDNS]`（`Enable=1`、`User0` / `Password0`）へ書き直してください。
+  ini は周期ごとに読み直すので、書き直せば再起動なしで有効になります。
+- 旧版の認証情報はこのリポジトリに含まれていません。手元の旧 ini から移してください。
 
 ## アンインストール
 
