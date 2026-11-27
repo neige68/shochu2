@@ -6,7 +6,7 @@ rem Copyright (C) 2026 neige68
 rem
 rem Note: dist
 rem
-rem Windows:   10 and later
+rem Windows:   8 and later
 rem
 
 setlocal
